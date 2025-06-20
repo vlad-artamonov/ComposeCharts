@@ -41,26 +41,27 @@ val gridProperties = GridProperties(
     xAxisProperties = GridProperties.AxisProperties(
         thickness = .2.dp,
         color = SolidColor(Color.Gray.copy(alpha = .5f)),
-        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f,15f), phase = 10f),
+        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f, 15f), phase = 10f),
     ),
     yAxisProperties = GridProperties.AxisProperties(
         thickness = .2.dp,
         color = SolidColor(Color.Gray.copy(alpha = .5f)),
-        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f,15f), phase = 10f),
+        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f, 15f), phase = 10f),
     ),
 )
 val dividerProperties = DividerProperties(
     xAxisProperties = LineProperties(
         thickness = .2.dp,
         color = SolidColor(Color.Gray.copy(alpha = .5f)),
-        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f,15f), phase = 10f),
+        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f, 15f), phase = 10f),
     ),
     yAxisProperties = LineProperties(
         thickness = .2.dp,
         color = SolidColor(Color.Gray.copy(alpha = .5f)),
-        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f,15f), phase = 10f),
+        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f, 15f), phase = 10f),
     )
 )
+
 @Composable
 fun RowScope.LineSample() {
     val popupProperties = PopupProperties(
@@ -69,7 +70,7 @@ fun RowScope.LineSample() {
             color = Color.White,
             fontFamily = ubuntu
         ),
-        contentBuilder = { dataIndex,valueIndex,value->
+        contentBuilder = { dataIndex, valueIndex, value ->
             value.format(1) + " Million, lineIndex: $dataIndex, valueIndex: $valueIndex"
         },
         containerColor = Color(0xff414141)
@@ -131,14 +132,15 @@ fun RowScope.LineSample() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize()
@@ -158,12 +160,19 @@ fun RowScope.LineSample() {
                         it.format(1) + " M"
                     },
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
+                labelHelperProperties = LabelHelperProperties(
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = ubuntu,
+                        color = Color.White
+                    )
+                ),
                 curvedEdges = false
             )
         }
     }
 }
+
 @Composable
 fun RowScope.LineSample2() {
     val data = remember {
@@ -187,69 +196,68 @@ fun RowScope.LineSample2() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
-        elevation = CardDefaults.elevatedCardElevation(2.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xff2D2D2D)
+    Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
+        LineChart(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 22.dp),
+            data = data,
+            animationMode = AnimationMode.Together(delayBuilder = {
+                it * 500L
+            }),
+            gridProperties = gridProperties.copy(
+                yAxisProperties = GridProperties.AxisProperties(enabled = false),
+                xAxisProperties = gridProperties.xAxisProperties.copy(
+                    thickness = .5.dp
+                )
+            ),
+            dividerProperties = DividerProperties(
+                yAxisProperties = LineProperties(enabled = false),
+                xAxisProperties = LineProperties(
+                    thickness = .5.dp,
+                    color = SolidColor(Color.Gray.copy(alpha = .5f)),
+                    style = StrokeStyle.Dashed(intervals = floatArrayOf(15f, 15f), phase = 10f),
+                )
+            ),
+            popupProperties = PopupProperties(
+                textStyle = TextStyle(
+                    fontSize = 11.sp,
+                    color = Color.White,
+                    fontFamily = ubuntu
+                ),
+                contentBuilder = { _, _, value ->
+                    value.format(1) + " °C"
+                },
+                containerColor = Color(0xff414141)
+            ),
+            zeroLineProperties = ZeroLineProperties(
+                enabled = true,
+                color = SolidColor(Color(0xFFAD1457)),
+                thickness = 1.dp,
+            ),
+            indicatorProperties = HorizontalIndicatorProperties(
+                textStyle = TextStyle(
+                    fontSize = 11.sp,
+                    fontFamily = ubuntu, color = Color.White
+                ),
+                contentBuilder = {
+                    it.format(1) + " °C"
+                },
+            ),
+            labelHelperProperties = LabelHelperProperties(
+                textStyle = TextStyle(
+                    fontSize = 12.sp,
+                    fontFamily = ubuntu,
+                    color = Color.White
+                )
+            ),
+            curvedEdges = false,
+            maxValue = 100.0,
+            minValue = -20.0
         )
-    ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
-            LineChart(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 22.dp),
-                data = data,
-                animationMode = AnimationMode.Together(delayBuilder = {
-                    it * 500L
-                }),
-                gridProperties = gridProperties.copy(
-                    yAxisProperties = GridProperties.AxisProperties(enabled = false),
-                    xAxisProperties = gridProperties.xAxisProperties.copy(
-                        thickness = .5.dp
-                    )
-                ),
-                dividerProperties = DividerProperties(
-                    yAxisProperties = LineProperties(enabled = false),
-                    xAxisProperties = LineProperties(
-                        thickness = .5.dp,
-                        color = SolidColor(Color.Gray.copy(alpha = .5f)),
-                        style = StrokeStyle.Dashed(intervals = floatArrayOf(15f,15f), phase = 10f),
-                    )
-                ),
-                popupProperties = PopupProperties(
-                    textStyle = TextStyle(
-                        fontSize = 11.sp,
-                        color = Color.White,
-                        fontFamily = ubuntu
-                    ),
-                    contentBuilder = { _,_,value->
-                        value.format(1) + " °C"
-                    },
-                    containerColor = Color(0xff414141)
-                ),
-                zeroLineProperties = ZeroLineProperties(
-                    enabled = true,
-                    color = SolidColor(Color(0xFFAD1457)),
-                    thickness = 1.dp,
-                ),
-                indicatorProperties = HorizontalIndicatorProperties(
-                    textStyle = TextStyle(
-                        fontSize = 11.sp,
-                        fontFamily = ubuntu, color = Color.White
-                    ),
-                    contentBuilder = {
-                        it.format(1) + " °C"
-                    },
-                ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
-                curvedEdges = false,
-                maxValue = 100.0,
-                minValue = -20.0
-            )
-        }
     }
 }
+
 @Composable
 fun RowScope.LineSample3() {
     val data = remember {
@@ -298,14 +306,15 @@ fun RowScope.LineSample3() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize()
@@ -337,11 +346,17 @@ fun RowScope.LineSample3() {
                         it.format(1) + " M"
                     }
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
+                labelHelperProperties = LabelHelperProperties(
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = ubuntu,
+                        color = Color.White
+                    )
+                ),
                 curvedEdges = false,
                 labelProperties = LabelProperties(
                     enabled = true,
-                    labels = listOf("Jan","Feb","Mar","Apr","May"),
+                    labels = listOf("Jan", "Feb", "Mar", "Apr", "May"),
                     textStyle = TextStyle(
                         fontSize = 11.sp,
                         fontFamily = ubuntu, color = Color.White
@@ -351,6 +366,7 @@ fun RowScope.LineSample3() {
         }
     }
 }
+
 @Composable
 fun RowScope.LineSample4() {
     val data = remember {
@@ -382,14 +398,15 @@ fun RowScope.LineSample4() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize()
@@ -406,7 +423,7 @@ fun RowScope.LineSample4() {
                         color = Color.White,
                         fontFamily = ubuntu,
                     ),
-                    contentBuilder = { _,_,value->
+                    contentBuilder = { _, _, value ->
                         value.format(1) + " Million"
                     },
                     containerColor = Color(0xff414141)
@@ -420,12 +437,19 @@ fun RowScope.LineSample4() {
                         it.format(1) + " M"
                     }
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
+                labelHelperProperties = LabelHelperProperties(
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = ubuntu,
+                        color = Color.White
+                    )
+                ),
                 curvedEdges = true
             )
         }
     }
 }
+
 @Composable
 fun RowScope.LineSample5() {
     val data = remember {
@@ -448,14 +472,15 @@ fun RowScope.LineSample5() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize()
@@ -471,7 +496,7 @@ fun RowScope.LineSample5() {
                         fontSize = 11.sp,
                         fontFamily = ubuntu, color = Color.White,
                     ),
-                    contentBuilder = { _,_,value->
+                    contentBuilder = { _, _, value ->
                         value.format(1) + " Million"
                     },
                     containerColor = Color(0xff414141)
@@ -485,11 +510,17 @@ fun RowScope.LineSample5() {
                         it.format(1) + " M"
                     }
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
+                labelHelperProperties = LabelHelperProperties(
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = ubuntu,
+                        color = Color.White
+                    )
+                ),
                 curvedEdges = false,
                 labelProperties = LabelProperties(
                     enabled = true,
-                    labels = listOf("Jan","Feb","Mar","Apr","May"),
+                    labels = listOf("Jan", "Feb", "Mar", "Apr", "May"),
                     textStyle = TextStyle(
                         fontSize = 11.sp,
                         fontFamily = ubuntu, color = Color.White
@@ -499,6 +530,7 @@ fun RowScope.LineSample5() {
         }
     }
 }
+
 @Composable
 fun RowScope.LineSample6() {
     val data = remember {
@@ -517,7 +549,10 @@ fun RowScope.LineSample6() {
                 gradientAnimationDelay = 1000,
                 drawStyle = DrawStyle.Stroke(
                     width = 3.dp,
-                    strokeStyle = StrokeStyle.Dashed(intervals = floatArrayOf(10f,10f), phase = 15f)
+                    strokeStyle = StrokeStyle.Dashed(
+                        intervals = floatArrayOf(10f, 10f),
+                        phase = 15f
+                    )
                 ),
                 dotProperties = DotProperties(
                     enabled = true,
@@ -541,7 +576,10 @@ fun RowScope.LineSample6() {
                 gradientAnimationDelay = 1000,
                 drawStyle = DrawStyle.Stroke(
                     width = 3.dp,
-                    strokeStyle = StrokeStyle.Dashed(intervals = floatArrayOf(10f,10f), phase = 15f)
+                    strokeStyle = StrokeStyle.Dashed(
+                        intervals = floatArrayOf(10f, 10f),
+                        phase = 15f
+                    )
                 ),
                 dotProperties = DotProperties(
                     enabled = true,
@@ -554,14 +592,15 @@ fun RowScope.LineSample6() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize()
@@ -577,7 +616,7 @@ fun RowScope.LineSample6() {
                         fontSize = 11.sp,
                         fontFamily = ubuntu, color = Color.White
                     ),
-                    contentBuilder = { _,_,value->
+                    contentBuilder = { _, _, value ->
                         value.format(1) + " Million"
                     },
                     containerColor = Color(0xff414141)
@@ -593,18 +632,25 @@ fun RowScope.LineSample6() {
                 ),
                 labelProperties = LabelProperties(
                     enabled = true,
-                    labels = listOf("Jan","Feb","Mar","Apr","May"),
+                    labels = listOf("Jan", "Feb", "Mar", "Apr", "May"),
                     textStyle = TextStyle(
                         fontSize = 11.sp,
                         fontFamily = ubuntu, color = Color.White
                     ),
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
+                labelHelperProperties = LabelHelperProperties(
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = ubuntu,
+                        color = Color.White
+                    )
+                ),
                 curvedEdges = true
             )
         }
     }
 }
+
 @Composable
 fun RowScope.LineSample7() {
     val data = remember {
@@ -629,14 +675,15 @@ fun RowScope.LineSample7() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize()
@@ -653,7 +700,7 @@ fun RowScope.LineSample7() {
                         color = Color.White,
                         fontFamily = ubuntu,
                     ),
-                    contentBuilder = { _,_,value->
+                    contentBuilder = { _, _, value ->
                         value.format(1) + " Million"
                     },
                     containerColor = Color(0xff414141),
@@ -667,7 +714,13 @@ fun RowScope.LineSample7() {
                         it.format(1) + " M"
                     }
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
+                labelHelperProperties = LabelHelperProperties(
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = ubuntu,
+                        color = Color.White
+                    )
+                ),
                 curvedEdges = true
             )
         }
@@ -696,14 +749,15 @@ fun RowScope.LineSample8() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -719,7 +773,7 @@ fun RowScope.LineSample8() {
                         color = Color.White,
                         fontFamily = ubuntu,
                     ),
-                    contentBuilder = { _,_,value->
+                    contentBuilder = { _, _, value ->
                         value.format(1) + " Million"
                     },
                     containerColor = Color(0xff414141)
@@ -750,14 +804,15 @@ fun RowScope.LineSample9() {
             ),
         )
     }
-    Card(modifier=Modifier.height(270.dp).fillMaxWidth().weight(1f)
-        .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
+    Card(
+        modifier = Modifier.height(270.dp).fillMaxWidth().weight(1f)
+            .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
             LineChart(
                 modifier = Modifier
                     .fillMaxSize()
@@ -774,7 +829,7 @@ fun RowScope.LineSample9() {
                         color = Color.White,
                         fontFamily = ubuntu,
                     ),
-                    contentBuilder = { _,_,value->
+                    contentBuilder = { _, _, value ->
                         value.format(1) + " Million"
                     },
                     containerColor = Color(0xff414141)
@@ -788,7 +843,13 @@ fun RowScope.LineSample9() {
                         it.format(1) + " M"
                     }
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, fontFamily = ubuntu, color = Color.White)),
+                labelHelperProperties = LabelHelperProperties(
+                    textStyle = TextStyle(
+                        fontSize = 12.sp,
+                        fontFamily = ubuntu,
+                        color = Color.White
+                    )
+                ),
                 curvedEdges = false
             )
         }
