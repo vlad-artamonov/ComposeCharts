@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,7 +36,6 @@ import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.LineProperties
 import ir.ehsannarmani.compose_charts.models.PopupProperties
 import ir.ehsannarmani.compose_charts.models.StrokeStyle
-import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
 
 val gridProperties = GridProperties(
     xAxisProperties = GridProperties.AxisProperties(
@@ -174,86 +174,48 @@ fun RowScope.LineSample() {
 }
 
 @Composable
-fun RowScope.LineSample2() {
-    val data = remember {
-        listOf(
-            Line(
-                label = "Temperature",
-                values = listOf(
-                    28.0,
-                    41.0,
-                    -15.0,
-                    27.0,
-                    54.0
-                ),
-                color = SolidColor(Color(0xFF23af92)),
-                firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
-                secondGradientFillColor = Color.Transparent,
-                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                gradientAnimationDelay = 1000,
-                drawStyle = DrawStyle.Stroke(),
-                curvedEdges = true,
+fun RowScope.LineSampleFoxcoa() {
+
+    val data = listOf(
+        Line(
+            label = "",
+            values = listOf(28.0, 41.0, 5.0, 10.0, 35.0),
+            color = SolidColor(Color.White),
+            firstGradientFillColor = Color.White.copy(alpha = .5f),
+            secondGradientFillColor = Color.Transparent,
+            strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+            gradientAnimationDelay = 1000,
+            drawStyle = DrawStyle.Stroke(width = 2.dp),
+            popupProperties = PopupProperties(
+                containerColor = Color.White,
+                contentHorizontalPadding = 20.dp,
+                contentVerticalPadding = 20.dp,
+                duration = 5000,
             ),
         )
-    }
+    )
     Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)) {
         LineChart(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 22.dp),
-            data = data,
-            animationMode = AnimationMode.Together(delayBuilder = {
-                it * 500L
-            }),
-            gridProperties = gridProperties.copy(
-                yAxisProperties = GridProperties.AxisProperties(enabled = false),
-                xAxisProperties = gridProperties.xAxisProperties.copy(
-                    thickness = .5.dp
-                )
-            ),
-            dividerProperties = DividerProperties(
-                yAxisProperties = LineProperties(enabled = false),
-                xAxisProperties = LineProperties(
-                    thickness = .5.dp,
-                    color = SolidColor(Color.Gray.copy(alpha = .5f)),
-                    style = StrokeStyle.Dashed(intervals = floatArrayOf(15f, 15f), phase = 10f),
-                )
+                .wrapContentWidth()
+                .height(300.dp)
+                .padding(top = 100.dp),
+            data = remember {
+                data
+            },
+            labelHelperProperties = LabelHelperProperties(enabled = false),
+            indicatorProperties = HorizontalIndicatorProperties(enabled = false),
+            gridProperties = GridProperties(
+                xAxisProperties = GridProperties.AxisProperties(
+                    color = SolidColor(Color.White)
+                ),
+                yAxisProperties = GridProperties.AxisProperties(
+                    color = SolidColor(Color.White)
+                ),
             ),
             popupProperties = PopupProperties(
-                textStyle = TextStyle(
-                    fontSize = 11.sp,
-                    color = Color.White,
-                    fontFamily = ubuntu
-                ),
-                contentBuilder = { _, _, value ->
-                    value.format(1) + " °C"
-                },
-                containerColor = Color(0xff414141)
-            ),
-            zeroLineProperties = ZeroLineProperties(
-                enabled = true,
-                color = SolidColor(Color(0xFFAD1457)),
-                thickness = 1.dp,
-            ),
-            indicatorProperties = HorizontalIndicatorProperties(
-                textStyle = TextStyle(
-                    fontSize = 11.sp,
-                    fontFamily = ubuntu, color = Color.White
-                ),
-                contentBuilder = {
-                    it.format(1) + " °C"
-                },
-            ),
-            labelHelperProperties = LabelHelperProperties(
-                textStyle = TextStyle(
-                    fontSize = 12.sp,
-                    fontFamily = ubuntu,
-                    color = Color.White
-                )
-            ),
-            curvedEdges = false,
-            maxValue = 100.0,
-            minValue = -20.0
+                enabled = true
+            )
         )
     }
 }

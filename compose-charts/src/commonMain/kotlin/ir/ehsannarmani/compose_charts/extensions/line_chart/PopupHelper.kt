@@ -7,12 +7,12 @@ import ir.ehsannarmani.compose_charts.utils.calculateValue
 import kotlin.math.floor
 import kotlin.math.pow
 
-internal data class Value(
+data class Value(
     val calculatedValue: Double,
     val offset: Offset,
 )
 
-internal fun getPopupValue(
+fun getPopupValue(
     points: List<Double>,
     fraction: Double,
     rounded: Boolean = false,

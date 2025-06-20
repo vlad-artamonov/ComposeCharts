@@ -72,13 +72,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private data class Popup(
+data class Popup(
     val properties: PopupProperties,
     val position: Offset,
     val value: Double,
     val dataIndex: Int,
     val valueIndex: Int
 )
+
+fun List<Line>.minValue() = if (any { it.values.any { it < 0.0 } }) minOfOrNull {
+    it.values.minOfOrNull { it } ?: 0.0
+} ?: 0.0 else 0.0
+
+fun List<Line>.maxValue() = maxOfOrNull { it.values.maxOfOrNull { it } ?: 0.0 } ?: 0.0
 
 @Composable
 fun LineChart(
@@ -105,10 +111,8 @@ fun LineChart(
     ),
     dotsProperties: DotProperties = DotProperties(),
     labelProperties: LabelProperties = LabelProperties(enabled = false),
-    maxValue: Double = data.maxOfOrNull { it.values.maxOfOrNull { it } ?: 0.0 } ?: 0.0,
-    minValue: Double = if (data.any { it.values.any { it < 0.0 } }) data.minOfOrNull {
-        it.values.minOfOrNull { it } ?: 0.0
-    } ?: 0.0 else 0.0,
+    maxValue: Double = data.maxValue(),
+    minValue: Double = data.minValue()
 ) {
     if (data.isNotEmpty()) {
         require(minValue <= (data.minOfOrNull { it.values.minOfOrNull { it } ?: 0.0 } ?: 0.0)) {
@@ -136,20 +140,45 @@ fun LineChart(
     val chartWidth = remember {
         mutableFloatStateOf(0f)
     }
+    val popups = remember {
+        mutableStateListOf<Popup>()
+    }
 
     val dotAnimators = remember {
         mutableStateListOf<List<Animatable<Float, AnimationVector1D>>>()
     }
-    val popups = remember {
-        mutableStateListOf<Popup>()
-    }
+
     val popupsOffsetAnimators = remember {
         mutableStateListOf<Pair<Animatable<Float, AnimationVector1D>, Animatable<Float, AnimationVector1D>>>()
     }
     val linesPathData = remember {
         mutableStateListOf<PathData>()
     }
-    val indicators = remember(indicatorProperties.indicators,minValue,maxValue) {
+    if (popupProperties.enabled) {
+        data.forEachIndexed { index, line ->
+            println("drawPopup addPopup $index")
+            /*val popupValue = getPopupValue(
+                points = line.values,
+                fraction = 10.0,
+                rounded = line.curvedEdges ?: curvedEdges,
+                size = Size(100f, 10f),
+                minValue = minValue,
+                maxValue = maxValue
+            )
+
+            popups.add(
+                Popup(
+                    position = popupValue.offset,
+                    value = popupValue.calculatedValue,
+                    properties = popupProperties,
+                    dataIndex = index,
+                    valueIndex = line.values.size.dec()
+                )
+            )*/
+        }
+
+    }
+    val indicators = remember(indicatorProperties.indicators, minValue, maxValue) {
         indicatorProperties.indicators.ifEmpty {
             split(
                 count = indicatorProperties.count,
@@ -315,6 +344,8 @@ fun LineChart(
                                                     minValue = minValue,
                                                     maxValue = maxValue
                                                 )
+                                                println("drawPopup dataIndex $dataIndex, valueIndex $valueIndex, $popupValue")
+                                                println("drawPopup properties $properties")
                                                 popups.add(
                                                     Popup(
                                                         position = popupValue.offset,
@@ -372,9 +403,12 @@ fun LineChart(
                     }
                     if (linesPathData.isEmpty() || linesPathData.count() != data.count()) {
                         data.map {
-                            val startIndex = if(it.viewRange.startIndex < 0 || it.viewRange.startIndex >= it.values.size - 1) 0 else it.viewRange.startIndex
-                            val endIndex = if(it.viewRange.endIndex < 0 || it.viewRange.endIndex <= it.viewRange.startIndex
-                                || it.viewRange.endIndex > it.values.size - 1) it.values.size - 1  else it.viewRange.endIndex
+                            val startIndex =
+                                if (it.viewRange.startIndex < 0 || it.viewRange.startIndex >= it.values.size - 1) 0 else it.viewRange.startIndex
+                            val endIndex =
+                                if (it.viewRange.endIndex < 0 || it.viewRange.endIndex <= it.viewRange.startIndex
+                                    || it.viewRange.endIndex > it.values.size - 1
+                                ) it.values.size - 1 else it.viewRange.endIndex
 
                             getLinePath(
                                 dataPoints = it.values.map { it.toFloat() },
@@ -429,11 +463,11 @@ fun LineChart(
 
                         var startOffset = 0f
                         var endOffset = size.width
-                        if(pathData.startIndex > 0) {
-                            startOffset = pathData.xPositions[pathData.startIndex] .toFloat()
+                        if (pathData.startIndex > 0) {
+                            startOffset = pathData.xPositions[pathData.startIndex].toFloat()
                         }
 
-                        if(pathData.endIndex < line.values.size - 1) {
+                        if (pathData.endIndex < line.values.size - 1) {
                             endOffset = pathData.xPositions[pathData.endIndex].toFloat()
                         }
 
@@ -486,6 +520,7 @@ fun LineChart(
                         drawZeroLine()
                     }
                     popups.forEachIndexed { index, popup ->
+                        println("drawPopup $popup")
                         drawPopup(
                             popup = popup,
                             nextPopup = popups.getOrNull(index + 1),
@@ -520,11 +555,10 @@ fun LineChart(
 }
 
 
-
 @Composable
 private fun Indicators(
     modifier: Modifier = Modifier,
-    indicators:List<Double>,
+    indicators: List<Double>,
     indicatorProperties: HorizontalIndicatorProperties,
 ) {
     Column(
@@ -675,7 +709,7 @@ fun DrawScope.drawDots(
     pathMeasure.setPath(linePath, false)
     val lastPosition = pathMeasure.getPosition(pathMeasure.length)
     dataPoints.forEachIndexed { valueIndex, value ->
-        if(valueIndex in startIndex..endIndex)  {
+        if (valueIndex in startIndex..endIndex) {
             val dotOffset = Offset(
                 x = _size.width.spaceBetween(
                     itemCount = dataPoints.count(),

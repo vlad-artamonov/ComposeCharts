@@ -11,6 +11,6 @@ fun PhoneSample() {
         modifier = Modifier.fillMaxSize()
     )
     {
-        LineSample2()
+        LineSampleFoxcoa()
     }
 }
