@@ -6,11 +6,12 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Line(
     val label: String,
-    val valuesY: List<Double>,
+    val values: List<Double>,
     val color: Brush,
     val firstGradientFillColor: Color? = null,
     val secondGradientFillColor: Color? = null,
@@ -23,6 +24,5 @@ data class Line(
     val curvedEdges:Boolean? = null,
     val strokeProgress: Animatable<Float, AnimationVector1D> = Animatable(0f),
     val gradientProgress: Animatable<Float, AnimationVector1D> = Animatable(0f),
-    val viewRange: ViewRange = ViewRange(),
-    val valuesX: List<Double> = emptyList(),
+    val viewRange: ViewRange = ViewRange()
 )

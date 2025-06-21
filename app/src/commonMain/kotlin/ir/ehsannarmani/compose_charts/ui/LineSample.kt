@@ -79,7 +79,7 @@ fun RowScope.LineSample() {
         listOf(
             Line(
                 label = "Windows",
-                valuesY = listOf(
+                values = listOf(
                     75.0,
                     5.0,
                     70.0,
@@ -97,7 +97,7 @@ fun RowScope.LineSample() {
             ),
             Line(
                 label = "Linux",
-                valuesY = listOf(
+                values = listOf(
                     1.0,
                     19.0,
                     22.0,
@@ -114,7 +114,7 @@ fun RowScope.LineSample() {
             ),
             Line(
                 label = "MacOS",
-                valuesY = listOf(
+                values = listOf(
                     4.0,
                     40.0,
                     58.0,
@@ -179,7 +179,7 @@ fun RowScope.LineSampleFoxcoa() {
     val data = listOf(
         Line(
             label = "",
-            valuesY = listOf(28.0, 41.0, 5.0, 10.0, 35.0),
+            values = listOf(28.0, 41.0, 5.0, 10.0, 35.0),
             color = SolidColor(Color.White),
             firstGradientFillColor = Color.White.copy(alpha = .5f),
             secondGradientFillColor = Color.Transparent,
@@ -226,7 +226,7 @@ fun RowScope.LineSample3() {
         listOf(
             Line(
                 label = "Windows",
-                valuesY = listOf(
+                values = listOf(
                     88.0,
                     56.0,
                     70.0,
@@ -247,7 +247,7 @@ fun RowScope.LineSample3() {
             ),
             Line(
                 label = "Linux",
-                valuesY = listOf(
+                values = listOf(
                     30.0,
                     70.0,
                     45.0,
@@ -335,7 +335,7 @@ fun RowScope.LineSample4() {
         listOf(
             Line(
                 label = "Windows",
-                valuesY = MutableList(5) { (0..100).random().toDouble() },
+                values = MutableList(5) { (0..100).random().toDouble() },
                 color = SolidColor(Color(0xFF2B8130)),
                 strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
                 gradientAnimationDelay = 1000,
@@ -344,7 +344,7 @@ fun RowScope.LineSample4() {
             ),
             Line(
                 label = "Linux",
-                valuesY = MutableList(5) { (0..100).random().toDouble() },
+                values = MutableList(5) { (0..100).random().toDouble() },
                 color = SolidColor(Color(0xFFE65100)),
                 strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
                 gradientAnimationDelay = 1000,
@@ -352,7 +352,7 @@ fun RowScope.LineSample4() {
             ),
             Line(
                 label = "Android",
-                valuesY = MutableList(5) { (0..100).random().toDouble() },
+                values = MutableList(5) { (0..100).random().toDouble() },
                 color = SolidColor(Color(0xFFB71C1C)),
                 strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
                 gradientAnimationDelay = 1000,
@@ -418,7 +418,7 @@ fun RowScope.LineSample5() {
         listOf(
             Line(
                 label = "Windows",
-                valuesY = MutableList(5) { (0..100).random().toDouble() },
+                values = MutableList(5) { (0..100).random().toDouble() },
                 color = SolidColor(Color(0xFFF7B731)),
                 strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
                 gradientAnimationDelay = 1000,
@@ -426,7 +426,7 @@ fun RowScope.LineSample5() {
             ),
             Line(
                 label = "Linux",
-                valuesY = MutableList(5) { (0..100).random().toDouble() },
+                values = MutableList(5) { (0..100).random().toDouble() },
                 color = SolidColor(Color(0xFF0FB9B1)),
                 strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
                 gradientAnimationDelay = 1000,
@@ -499,7 +499,7 @@ fun RowScope.LineSample6() {
         listOf(
             Line(
                 label = "Windows",
-                valuesY = listOf(
+                values = listOf(
                     67.0,
                     0.0,
                     88.0,
@@ -526,7 +526,7 @@ fun RowScope.LineSample6() {
             ),
             Line(
                 label = "Linux",
-                valuesY = listOf(
+                values = listOf(
                     98.0,
                     67.0,
                     15.0,
@@ -619,7 +619,7 @@ fun RowScope.LineSample7() {
         listOf(
             Line(
                 label = "Linux",
-                valuesY = listOf(
+                values = listOf(
                     71.0,
                     0.0,
                     100.0,
@@ -695,7 +695,7 @@ fun RowScope.LineSample8() {
         listOf(
             Line(
                 label = "Linux",
-                valuesY = listOf(
+                values = listOf(
                     10.0,
                     20.0,
                     7.0,
@@ -757,7 +757,7 @@ fun RowScope.LineSample9() {
         listOf(
             Line(
                 label = "Windows",
-                valuesY = MutableList(5) { (0..100).random().toDouble() },
+                values = MutableList(5) { (0..100).random().toDouble() },
                 color = SolidColor(Color(0xFFfd9644)),
                 strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
                 gradientAnimationDelay = 1000,

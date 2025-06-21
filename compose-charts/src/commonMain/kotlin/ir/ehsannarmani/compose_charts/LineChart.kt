@@ -80,11 +80,11 @@ data class Popup(
     val valueIndex: Int
 )
 
-fun List<Line>.minValue() = if (any { it.valuesY.any { it < 0.0 } }) minOfOrNull {
-    it.valuesY.minOfOrNull { it } ?: 0.0
+fun List<Line>.minValue() = if (any { it.values.any { it < 0.0 } }) minOfOrNull {
+    it.values.minOfOrNull { it } ?: 0.0
 } ?: 0.0 else 0.0
 
-fun List<Line>.maxValue() = maxOfOrNull { it.valuesY.maxOfOrNull { it } ?: 0.0 } ?: 0.0
+fun List<Line>.maxValue() = maxOfOrNull { it.values.maxOfOrNull { it } ?: 0.0 } ?: 0.0
 
 @Composable
 fun LineChart(
@@ -115,10 +115,10 @@ fun LineChart(
     minValue: Double = data.minValue()
 ) {
     if (data.isNotEmpty()) {
-        require(minValue <= (data.minOfOrNull { it.valuesY.minOfOrNull { it } ?: 0.0 } ?: 0.0)) {
+        require(minValue <= (data.minOfOrNull { it.values.minOfOrNull { it } ?: 0.0 } ?: 0.0)) {
             "Chart data must be at least $minValue (Specified Min Value)"
         }
-        require(maxValue >= (data.maxOfOrNull { it.valuesY.maxOfOrNull { it } ?: 0.0 } ?: 0.0)) {
+        require(maxValue >= (data.maxOfOrNull { it.values.maxOfOrNull { it } ?: 0.0 } ?: 0.0)) {
             "Chart data must be at most $maxValue (Specified Max Value)"
         }
     }
@@ -215,7 +215,7 @@ fun LineChart(
         launch {
             data.forEach {
                 val animators = mutableListOf<Animatable<Float, AnimationVector1D>>()
-                it.valuesY.forEach {
+                it.values.forEach {
                     animators.add(Animatable(0f))
                 }
                 dotAnimators.add(animators)
@@ -332,12 +332,12 @@ fun LineChart(
                                                 //Calculate the data index
                                                 val valueIndex = calculateValueIndex(
                                                     fraction = fraction.toDouble(),
-                                                    values = line.valuesY,
+                                                    values = line.values,
                                                     pathData = pathData
                                                 )
 
                                                 val popupValue = getPopupValue(
-                                                    points = line.valuesY,
+                                                    points = line.values,
                                                     fraction = fraction.toDouble(),
                                                     rounded = line.curvedEdges ?: curvedEdges,
                                                     size = _size,
@@ -404,16 +404,16 @@ fun LineChart(
                     if (linesPathData.isEmpty() || linesPathData.count() != data.count()) {
                         data.map {
                             val startIndex =
-                                if (it.viewRange.startIndex < 0 || it.viewRange.startIndex >= it.valuesY.size - 1) 0 else it.viewRange.startIndex
+                                if (it.viewRange.startIndex < 0 || it.viewRange.startIndex >= it.values.size - 1) 0 else it.viewRange.startIndex
                             val endIndex =
                                 if (it.viewRange.endIndex < 0 || it.viewRange.endIndex <= it.viewRange.startIndex
-                                    || it.viewRange.endIndex > it.valuesY.size - 1
-                                ) it.valuesY.size - 1 else it.viewRange.endIndex
+                                    || it.viewRange.endIndex > it.values.size - 1
+                                ) it.values.size - 1 else it.viewRange.endIndex
 
                             getLinePath(
-                                dataPointsY = it.valuesY.map { it.toFloat() },
-                                maxValueY = maxValue.toFloat(),
-                                minValueY = minValue.toFloat(),
+                                dataPoints = it.values.map { it.toFloat() },
+                                maxValue = maxValue.toFloat(),
+                                minValue = minValue.toFloat(),
                                 rounded = it.curvedEdges ?: curvedEdges,
                                 size = size.copy(height = chartAreaHeight),
                                 startIndex,
@@ -467,7 +467,7 @@ fun LineChart(
                             startOffset = pathData.xPositions[pathData.startIndex].toFloat()
                         }
 
-                        if (pathData.endIndex < line.valuesY.size - 1) {
+                        if (pathData.endIndex < line.values.size - 1) {
                             endOffset = pathData.xPositions[pathData.endIndex].toFloat()
                         }
 
@@ -499,7 +499,7 @@ fun LineChart(
 
                         if ((line.dotProperties?.enabled ?: dotsProperties.enabled)) {
                             drawDots(
-                                dataPoints = line.valuesY.mapIndexed { mapIndex, value ->
+                                dataPoints = line.values.mapIndexed { mapIndex, value ->
                                     (dotAnimators.getOrNull(
                                         index
                                     )?.getOrNull(mapIndex) ?: Animatable(0f)) to value.toFloat()
